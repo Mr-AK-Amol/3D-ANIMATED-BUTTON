@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>3D Animated Web Page</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(145deg, #0f0f0f, #1c1c1c);
+      overflow-x: hidden;
+      color: #fff;
+      cursor: none;
+    }
+
+    header {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      perspective: 1000px;
+      overflow: hidden;
+    }
+
+    .stars {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 200%;
+      background: url('https://www.transparenttextures.com/patterns/stardust.png');
+      animation: starsMove 60s linear infinite;
+      opacity: 0.3;
+      z-index: 0;
+    }
+
+    @keyframes starsMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-50%, -50%); }
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      padding: 40px 60px;
+      border-radius: 20px;
+      text-align: center;
+      transform-style: preserve-3d;
+      transition: transform 0.2s;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      background: linear-gradient(90deg, #00ffe1, #ff00c8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.3rem;
+      color: #ccc;
+    }
+
+    .neon-btn {
+      margin-top: 30px;
+      padding: 15px 40px;
+      font-size: 1.2rem;
+      color: #fff;
+      border: none;
+      background: #111;
+      border-radius: 50px;
+      position: relative;
+      z-index: 1;
+      cursor: pointer;
+      overflow: hidden;
+      box-shadow: 0 0 20px #00ffe1, 0 0 40px #ff00c8;
+    }
+
+    .neon-btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -75%;
+      width: 100%; height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+      transform: skewX(-20deg);
+      transition: 0.5s;
+    }
+
+    .neon-btn:hover::before {
+      left: 150%;
+    }
+
+    section {
+      padding: 100px 30px;
+      background: #111;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(60px);
+      transition: all 1s ease;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #00ffe1;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1000;
+      transition: transform 0.1s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor"></div>
+
+  <header id="hero">
+    <div class="stars"></div>
+    <div class="glass-card" id="glassCard">
+      <h1>Web Vibe Design</h1>
+      <p>Immersive 3D Interfaces & Modern Web Aesthetics</p>
+      <button class="neon-btn">Get Started</button>
+    </div>
+  </header>
+
+  <section class="reveal">
+    <h2>✨ Interactive Design</h2>
+    <p>3D effects, animations, and dynamic layers that move with you.</p>
+  </section>
+
+  <section class="reveal">
+    <h2>🚀 Performance Meets Style</h2>
+    <p>Optimized for speed while looking visually stunning.</p>
+  </section>
+
+  <script>
+    // Scroll Reveal Effect
+    function reveal() {
+      const reveals = document.querySelectorAll(".reveal");
+      for (let i = 0; i < reveals.length; i++) {
+        const windowHeight = window.innerHeight;
+        const elementTop = reveals[i].getBoundingClientRect().top;
+        const revealPoint = 150;
+
+        if (elementTop < windowHeight - revealPoint) {
+          reveals[i].classList.add("active");
+        }
+      }
+    }
+    window.addEventListener("scroll", reveal);
+    reveal();
+
+    // 3D Parallax Tilt on Card
+    const card = document.getElementById("glassCard");
+    document.addEventListener("mousemove", (e) => {
+      const { innerWidth: w, innerHeight: h } = window;
+      const x = (e.clientX / w - 0.5) * 20;
+      const y = (e.clientY / h - 0.5) * -20;
+      card.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+    });
+
+    // Custom Cursor
+    const cursor = document.querySelector(".cursor");
+    document.addEventListener("mousemove", e => {
+      cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+    });
+  </script>
+</body>
+</html>
